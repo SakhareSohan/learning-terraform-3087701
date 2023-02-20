@@ -36,7 +36,7 @@ resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
-  vpc_security_group_ids = [module.blog_sg.security_group_id]
+  vpc_id      = module.vpc_public_subnets[0]
 
   tags = {
     Name = "HelloWorld"
@@ -48,7 +48,7 @@ module "blog_sg" {
 
   name        = "blog"
   description = "Security group for web-server with HTTP ports open within VPC"
-  vpc_id      = module.vpc_public_subnets[0]
+  vpc_id = module.blog_vpc.vpc_id
 
   ingress_rules = ["http-80-tcp","https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
